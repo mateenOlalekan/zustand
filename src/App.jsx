@@ -1,83 +1,133 @@
-import "./App.css";
-// import { useContext } from "react";
-// import { FaPlusCircle, FaEdit, FaTrash } from "react-icons/fa";
-// import { CardContext } from "./CardContext";
+// import "./App.css";
+// import Navbar from "./Components/Navbar";
+// import Topbar from "./Components/Topbar";
+// import HeroSlider from "./Components/HeroSlider";
 
 // function App() {
-//   const { subcard, edit, editingIndex, setEdit, addCard, deleteCard, startEditing, saveEdit } = useContext(CardContext);
-
 //   return (
 //     <>
-    
-//       <div className="max-w-md mx-auto bg-white shadow-md rounded-lg p-4">
-//         <div className="flex justify-between items-center">
-//           <h2 className="text-lg font-semibold">Main Card</h2>
-//           <FaPlusCircle className="cursor-pointer text-green-500" onClick={addCard} />
-//         </div>
-
-//         {/* Sub-Cards Section */}
-//         <div className="mt-4">
-//           {subcard.map((card) => (
-//             <div key={card.id} className="bg-gray-100 p-3 rounded-md mb-2 flex justify-between items-center">
-//               {editingIndex === card.id ? (
-//                 <input
-//                   type="text"
-//                   value={edit}
-//                   onChange={(e) => setEdit(e.target.value)}
-//                   onBlur={() => saveEdit(card.id)}
-//                   className="border p-1 w-full"
-//                   autoFocus
-//                 />
-//               ) : (
-//                 <span>{card.text}</span>
-//               )}
-//               <div className="flex gap-2">
-//                 <FaEdit className="cursor-pointer text-blue-500" onClick={() => startEditing(card.id, card.text)} />
-//                 <FaTrash className="cursor-pointer text-red-500" onClick={() => deleteCard(card.id)} />
-//               </div>
-//             </div>
-//           ))}
-//         </div>
-//       </div>
-//     </>
-//   );
-// }
-// export default App;
-
-// import React from 'react';
-// import useStore from "./store.jsx"
-
-// function App() {
-//   const {count,increment,decrement,reset} = useStore ()
-//   return (
-//     <>
-//     <div className="w-screen h-screen flex justify-center items-center">
-//       <div className="max-w-4xl shadow-lg bg-green-200 flex flex-col gap-4 p-3 rounded-lg">
-//         <p className="text-center">{count}</p>
-//         <div className="flex justify-between">
-//           <button className="p-3 rounded-md shadow-sm" onClick={()=>increment()}> add</button>
-//           <button className="p-3 rounded-md shadow-sm" onClick={()=>decrement()}> add</button>
-//           <button className="p-3 rounded-md shadow-sm" onClick={()=>reset()}> add</button>
-//         </div>
-//       </div>
-//     </div>
-
+//       <Topbar/>
+//       <HeroSlider/>
 //     </>
 //   )
 // }
 
 // export default App
-import Navbar from "./Components/Navbar";
-import Topbar from "./Components/Topbar";
-import HeroSlider from "./Components/HeroSlider";
+import "./App.css";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
-function App() {
+const API_URL = "https://jsonplaceholder.typicode.com/posts";
+
+const App = () => {
+  const [posts, setPosts] = useState([]);
+  const [title, setTitle] = useState("");
+  const [body, setBody] = useState("");
+  const [editId, setEditId] = useState(null);
+
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get(API_URL);
+      setPosts(response.data.slice(0, 5));
+    } catch (error) {
+      console.error("Error fetching posts:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, []);
+
+  const createPost = async () => {
+    const newPost = { title, body, userId: 1 };
+    const response = await axios.post(API_URL, newPost);
+    setPosts([response.data, ...posts]);
+    setTitle("");
+    setBody("");
+  };
+
+  const updatePost = async () => {
+    const updatedPost = { title, body, userId: 1 };
+    const response = await axios.put(`${API_URL}/${editId}`, updatedPost);
+    setPosts(posts.map((post) => (post.id === editId ? response.data : post)));
+    setEditId(null);
+    setTitle("");
+    setBody("");
+  };
+
+  const deletePost = async (id) => {
+    await axios.delete(`${API_URL}/${id}`);
+    setPosts(posts.filter((post) => post.id !== id));
+  };
+
   return (
-    <>
-      <Topbar/>
-      <HeroSlider/>
-    </>
-  )
-}
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10">
+      <div className="w-full max-w-7xl bg-white shadow-lg rounded-lg p-6">
+        <h1 className="text-2xl font-bold text-center mb-4 text-gray-800">React CRUD App</h1>
 
-export default App
+        {/* Form Section */}
+        <div className="mb-6">
+          <input
+            className="w-full p-3 border rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="Title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
+          <textarea
+            className="w-full p-3 border rounded-md mb-2 focus:outline-none focus:ring-2 focus:ring-blue-400"
+            placeholder="Body"
+            value={body}
+            onChange={(e) => setBody(e.target.value)}
+          />
+          {editId ? (
+            <button
+              className="w-full bg-yellow-500 text-white font-semibold py-2 rounded-md hover:bg-yellow-600 transition"
+              onClick={updatePost}
+            >
+              Update Post
+            </button>
+          ) : (
+            <button
+              className="w-full bg-blue-500 text-white font-semibold py-2 rounded-md hover:bg-blue-600 transition"
+              onClick={createPost}
+            >
+              Add Post
+            </button>
+          )}
+        </div>
+
+        {/* Post List */}
+        <ul className="space-y-4 grid grid-cols-4 gap-2">
+          {posts.map((post) => (
+            <li key={post.id} className=" flex-col bg-gray-50 p-4 rounded-md shadow flex justify-between items-center">
+              <div>
+                <h3 className="text-lg font-semibold text-gray-800">{post.title}</h3>
+                <p className="text-sm text-gray-600">{post.body}</p>
+              </div>
+              <div className="space-x-1 w-full flex justify-between items-center gap-2">
+                <button
+                  className="bg-red-500 text-white px-3 py-1 rounded-md hover:bg-red-600 transition"
+                  onClick={() => deletePost(post.id)}
+                >
+                  Delete
+                </button>
+                <button
+                  className="bg-green-500 text-white px-3 py-1 rounded-md hover:bg-green-600 transition"
+                  onClick={() => {
+                    setTitle(post.title);
+                    setBody(post.body);
+                    setEditId(post.id);
+                  }}
+                >
+                  Edit
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+};
+
+export default App;

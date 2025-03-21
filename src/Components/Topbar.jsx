@@ -97,76 +97,24 @@ const ECommerceHomepage = () => {
 
   
   return (
-    <div className="w-full">
+    <div className={`fixed z-50 w-full`}>
       {/* Top announcement bar */}
-      {/* <div className="bg-yellow-400 text-white py-2 px-4">
+      <div className="bg-yellow-400 text-white py-1 px-4">
         <div className="max-w-screen-2xl mx-auto text-center text-sm">
           <p>Free shipping on all orders over $50! Limited time offer. <span className="underline font-medium">Learn more</span></p>
         </div>
-      </div> */}
+      </div>
       
 
       <header className={`bg-white ${scrolled ? 'shadow-lg' : 'shadow-md'} sticky top-0 z-50 transition-all duration-400`}>
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between py-4">
+        <div className="max-w-screen-2xl mx-auto px-4">
+          <div className="flex items-center justify-between py-2">
             {/* Logo */}
             <div className="flex-shrink-0 font-bold text-2xl">
               <span className="text-yellow-600">Shop</span>
               <span className="text-yellow-900">Wave</span>
             </div>
-            
-            {/* Search Bar - Hidden on Mobile */}
-            <div className="hidden md:flex flex-grow max-w-md mx-6">
-              <div className="relative w-full">
-                <input
-                  type="text"
-                  placeholder="Search for products..."
-                  className="w-full pl-4 pr-12 py-2.5 border-2 border-yellow-400  rounded-full focus:outline-none focus:ring-2 ring-yellow-400 focus:border-transparent transition-all duration-200"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                />
-                <button className="absolute right-0 top-0 mt-2.5 mr-4 text-gray-600 hover:text-yellow-600 transition-colors duration-200">
-                  <Search size={20} />
-                </button>
-              </div>
-            </div>
-            
-            {/* Right Navigation - Hidden on Mobile */}
-            <div className="hidden md:flex items-center space-x-6">
-              <a href="#" className="flex items-center text-gray-600 hover:text-yellow-600 transition-colors duration-200">
-                <Bell size={20} className="mr-1" />
-              </a>
-              <a href="#" className="flex items-center text-gray-600 hover:text-yellow-600 transition-colors duration-200">
-                <Heart size={20} className="mr-1" />
-              </a>
-              <a href="#" className="flex items-center text-gray-600 hover:text-yellow-600 group relative transition-colors duration-200">
-                <div className="relative">
-                  <ShoppingCart size={20} className="mr-1" />
-                  <span className="absolute -top-2 -right-2 bg-yellow-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center group-hover:bg-yellow-400 transition-colors duration-200">
-                    {cartItems}
-                  </span>
-                </div>
-
-              </a>
-              <a href="#" className="flex items-center text-gray-600 hover:text-yellow-600 transition-colors duration-200">
-                <User size={20} className="mr-1" />
-              </a>
-            </div>
-            
-            {/* Mobile Menu Button */}
-            <div className="flex md:hidden">
-              <button 
-                onClick={() => setIsMenuOpen(!isMenuOpen)} 
-                className="text-gray-600 hover:text-yellow-600 transition-colors duration-200 focus:outline-none"
-                aria-label={isMenuOpen ? "Close menu" : "Open menu"}
-              >
-                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-              </button>
-            </div>
-          </div>
-          
-          {/* Category Navigation - Hidden on Mobile */}
-          <nav className="hidden md:block border-t border-gray-200">
+            <nav className="hidden md:block border-t border-gray-200">
             <ul className="flex justify-center py-3 space-x-12">
               {categories.map((category) => (
                 <li 
@@ -210,7 +158,60 @@ const ECommerceHomepage = () => {
                 <a href="#" className="text-gray-600 hover:text-yellow-600 font-medium transition-colors duration-200">New Arrivals</a>
               </li>
             </ul>
-          </nav>
+          </nav>            
+            {/* Search Bar - Hidden on Mobile */}
+
+            
+            {/* Right Navigation - Hidden on Mobile */}
+            <div className="hidden md:flex items-center space-x-2">
+            <div className="hidden md:flex flex-grow max-w-sm mx-2">
+              <div className="relative w-full">
+                <input
+                  type="text"
+                  placeholder="Search for products..."
+                  className="w-full pl-4 pr-12 py-1 border-2 border-yellow-400  rounded-full focus:outline-none focus:ring-2 ring-yellow-400 focus:border-transparent transition-all duration-200"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                />
+                <button className="absolute right-0 top-0 mt-1 mr-4 text-gray-600 hover:text-yellow-600 transition-colors duration-200">
+                  <Search size={20} />
+                </button>
+              </div>
+            </div>
+              <a href="#" className="flex items-center text-gray-600 hover:text-yellow-600 transition-colors duration-200">
+                <Bell size={20} className="mr-1" />
+              </a>
+              <a href="#" className="flex items-center text-gray-600 hover:text-yellow-600 transition-colors duration-200">
+                <Heart size={20} className="mr-1" />
+              </a>
+              <a href="#" className="flex items-center text-gray-600 hover:text-yellow-600 group relative transition-colors duration-200">
+                <div className="relative">
+                  <ShoppingCart size={20} className="mr-1" />
+                  <span className="absolute -top-2 -right-2 bg-yellow-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center group-hover:bg-yellow-400 transition-colors duration-200">
+                    {cartItems}
+                  </span>
+                </div>
+
+              </a>
+              <a href="#" className="flex items-center text-gray-600 hover:text-yellow-600 transition-colors duration-200">
+                <User size={20} className="mr-1" />
+              </a>
+            </div>
+            
+            {/* Mobile Menu Button */}
+            <div className="flex md:hidden">
+              <button 
+                onClick={() => setIsMenuOpen(!isMenuOpen)} 
+                className="text-gray-600 hover:text-yellow-600 transition-colors duration-200 focus:outline-none"
+                aria-label={isMenuOpen ? "Close menu" : "Open menu"}
+              >
+                {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
+              </button>
+            </div>
+          </div>
+          
+          {/* Category Navigation - Hidden on Mobile */}
+
         </div>
         
         {/* Mobile Menu - Slide from Left with normal duration */}

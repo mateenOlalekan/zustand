@@ -40,7 +40,7 @@ const HeroSlider = () => {
   ];
 
   return (
-    <div className="relative w-full h-[500px]">
+    <div className="relative w-full ">
       <Swiper
         spaceBetween={0}
         slidesPerView={1}
@@ -69,7 +69,7 @@ const HeroSlider = () => {
         {slides.map((slide) => (
           <SwiperSlide key={slide.id}>
             <div 
-              className="relative w-full h-screen bg-cover bg-center flex items-center justify-center"
+              className="relative w-full h-full bg-cover bg-center flex items-center justify-center"
               style={{ backgroundImage: `url(${slide.imageUrl})` }}
             >
               {/* Dark overlay */}
